@@ -25,7 +25,8 @@ public slots:
     void ubmit();
      void hello2(char *c_str, char *c_str1);
 
-    void hello(QString sname, QString semail, QString sphone, QString swebsite, QString scomp_name, QString scomp_desc, QString sapp_name, QString sapp_desc);
+     void hello(QString sname, QString semail, QString sphone, QString swebsite, QString scomp_name, QString scomp_desc, QString slicense, QString sapp_name, QString sapp_desc);
+
 
 };
 

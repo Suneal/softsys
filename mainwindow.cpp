@@ -15,9 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-     QMainWindow::showMaximized();
+  //  QWidget::showMaximised();
+    QMainWindow::showMaximized();
     QMainWindow::showFullScreen();
-
 
     ui->setupUi(this);
 
@@ -51,7 +51,7 @@ void MainWindow::submit()
        QWebElement qwebsite = frame->findFirstElement("#website");
        QWebElement qcomp_name = frame->findFirstElement("#comp_name");
        QWebElement qcomp_desc = frame->findFirstElement("#comp_description");
-
+        QWebElement qlicense = frame->findFirstElement("#license");
        QWebElement qapp_name = frame->findFirstElement("#app_name");
        QWebElement qapp_desc = frame->findFirstElement("#description");
 
@@ -73,7 +73,7 @@ void MainWindow::submit()
 
        QString scomp_desc = qcomp_desc.evaluateJavaScript("this.value").toString();
      //  char *c_str6 = scomp_desc.toLocal8Bit().data();
-
+          QString slicense = qlicense.evaluateJavaScript("this.value").toString();
 
        sapp_name = qapp_name.evaluateJavaScript("this.value").toString();
 //       char *c_str7 = sapp_name.toLocal8Bit().data();
@@ -82,7 +82,7 @@ void MainWindow::submit()
   //     char *c_str8 = sapp_desc.toLocal8Bit().data();
 
 
-           hello(sname, semail, sphone, swebsite, scomp_name, scomp_desc, sapp_name, sapp_desc);
+           hello(sname, semail, sphone, swebsite, scomp_name, scomp_desc, slicense, sapp_name, sapp_desc);
            ui->webView->setUrl(QUrl("qrc:/new/prefix2/gaesql/index.html"));
          //  ui->fisrtname_2->setText(lastName.evaluateJavaScript("this.value").toString());
 
@@ -98,14 +98,11 @@ void MainWindow::submit()
 
 
 }
-void MainWindow::hello(QString sname, QString semail, QString sphone, QString swebsite, QString scomp_name, QString scomp_desc, QString sapp_name, QString sapp_desc)
+void MainWindow::hello(QString sname, QString semail, QString sphone, QString swebsite, QString scomp_name, QString scomp_desc, QString slicense, QString sapp_name, QString sapp_desc)
 {
 
-    // Define Original Path
-
-
-  QString fileName22 = "/Users/user/QTProjects/SoftSys/ABOUT";
   QString fileName= QCoreApplication::applicationDirPath() + "/ABOUT";
+  QString fileName1= QCoreApplication::applicationDirPath() + "/LICENSE";
 
 
 //  QString fileName1 =  QDir::homePath();
@@ -135,13 +132,18 @@ void MainWindow::hello(QString sname, QString semail, QString sphone, QString sw
         QString further = "Further details:\n ";
         char *c_string2 = further.toLocal8Bit().data();
         out<<c_string2;
-
-
+        out<< "App Name: ";
+        char *app_name = sapp_name.toUtf8().data();
+        out << app_name;
+        out << "\n";
+        out<< "App Description: ";
+        char *app_desc = sapp_desc.toUtf8().data();
+        out << app_desc;
+        out << "\n";
         out<< "Email: ";
         char *email= semail.toUtf8().data();
         out << email;
         out << "\n";
-
         out<< "Website: ";
         char *website = swebsite.toUtf8().data();
         out << website;
@@ -156,20 +158,38 @@ void MainWindow::hello(QString sname, QString semail, QString sphone, QString sw
         char *comp_desc = scomp_desc.toUtf8().data();
         out << comp_desc;
         out << "\n";
+        file.close();
 
-        out<< "App Name: ";
-        char *app_name = sapp_name.toUtf8().data();
-        out << app_name;
-        out << "\n";
+    }
 
-        out<< "App Description: ";
-        char *app_desc = sapp_desc.toUtf8().data();
-        out << app_desc;
+
+    if (fileName1.isEmpty())
+        return;
+    else {
+        QFile file(fileName1);
+        if (!file.open(QIODevice::WriteOnly))
+        {
+            QMessageBox::information(this, tr("Unable to open file"),
+                file.errorString());
+                return;
+        }
+        QTextStream out(&file);
+
+        QString msc = "License: ";
+        char *c_string1 = msc.toLocal8Bit().data();
+        out << c_string1;
+
+
+        char *license = slicense.toUtf8().data();
+        out << license;
         out << "\n";
 
         file.close();
 
     }
+
+
+
 
     QProcess process;
   //  QProcess gzip;
@@ -250,7 +270,7 @@ void MainWindow::ubmit()
 void MainWindow::hello2(char *c_str, char *c_str1)
 {
     // Define Original Path
-    QString fileName = QCoreApplication::applicationDirPath() + "/xml.py";
+    QString fileName = QCoreApplication::applicationDirPath() + "/extended.xml";
 
     if (fileName.isEmpty())
         return;
@@ -293,13 +313,24 @@ void MainWindow::hello2(char *c_str, char *c_str1)
     process.start("cp", QStringList() << QCoreApplication::applicationDirPath() +"/ABOUT" << QCoreApplication::applicationDirPath()+ "/web2py/applications/" + sapp_name+ "/");
     process.waitForFinished(-1);
 
+    process.start("cp", QStringList() << QCoreApplication::applicationDirPath() +"/LICENSE" << QCoreApplication::applicationDirPath()+ "/web2py/applications/" + sapp_name+ "/");
+    process.waitForFinished(-1);
+
      process.start("cp", QStringList() << QCoreApplication::applicationDirPath() +"/db.py" << QCoreApplication::applicationDirPath() + "/web2py/applications/" + sapp_name+ "/models/");
        process.waitForFinished(-1);
-     process.start("python", QStringList() << QCoreApplication::applicationDirPath() + "/web2py/softsys.py");
+       process.start("python", QStringList() <<QCoreApplication::applicationDirPath()+"/automation.py"<< QCoreApplication::applicationDirPath() );
+        process.waitForFinished(-1);
+       process.start("cp", QStringList() <<QCoreApplication::applicationDirPath()+"/default.py" << QCoreApplication::applicationDirPath()+"/web2py/applications/"+sapp_name+"/controllers/");
+ process.waitForFinished(-1);
+       process.start("python", QStringList() << QCoreApplication::applicationDirPath() + "/web2py/softsys.py");
 
  //    process.start("cp" , QStringList() << "/Users/user/QTProjects/SoftSys/web2py/welcome.w2p" << "/Users/user/QTProjects/SoftSys/web2py/applications/" + sapp_name +"/");
 
         process.waitForFinished(-1);
+
+
+
+
      //  this->close();
 /*
     QProcess process;
