@@ -1,3 +1,4 @@
+
 import sys
 import os
 path = sys.argv[1] # first argument is location of web2py
@@ -12,7 +13,7 @@ i=0
 c=""
 for s in itemlist :
    # print s.attributes['name'].value
-    c += "grid"+`i`+"=SQLFORM.grid(db."+ s.attributes['name'].value +''',user_signature=False)\n    '''
+    c += '''def magic_'''+s.attributes['name'].value+'''():\n   '''+"grid"+"=SQLFORM.grid(db."+ s.attributes['name'].value +''',user_signature=False)\n   ''' + '''return locals()\n'''
     #print c
     i+=1
 print c
@@ -76,6 +77,14 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
+def magician():
+    """
+    exposes services. for example:
+    http://..../[app]/default/call/jsonrpc
+    decorate with @services.jsonrpc the functions to expose
+    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
+    """
+    return dict(message=T('Hello World'))
 
 
 @auth.requires_login() 
@@ -88,11 +97,49 @@ def api():
     rules = {
         '<tablename>': {'GET':{},'POST':{},'PUT':{},'DELETE':{}},
         }
-    return Collection(db).process(request,response,rules)
-def magic():\n    ''' + c + 	'''return locals()'''
+    return Collection(db).process(request,response,rules)\n''' + c 
 
   
 
 
 
 log_file.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#print itemlist[0].attributes['name'].value
+i=0
+d=""
+for sa in itemlist:
+    d += "\n"+'''{{=A(T("'''+sa.attributes['name'].value+'''"), _href=URL(response.title,'default','magic_'''+ sa.attributes['name'].value+''''))}}'''+"\n"
+    i+1
+print d
+
+
+log_file1 = open('magician.html', 'w')
+print>>log_file1, '''{{extend 'layout.html'}}
+<h1>SoftSys CRUD Interface</h1>'''+ d+ "\n"+'''{{=BEAUTIFY(response._vars)}}'''
+
+log_file1.close()
+
+

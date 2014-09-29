@@ -322,7 +322,10 @@ void MainWindow::hello2(char *c_str, char *c_str1)
         process.waitForFinished(-1);
        process.start("cp", QStringList() <<QCoreApplication::applicationDirPath()+"/default.py" << QCoreApplication::applicationDirPath()+"/web2py/applications/"+sapp_name+"/controllers/");
  process.waitForFinished(-1);
-       process.start("python", QStringList() << QCoreApplication::applicationDirPath() + "/web2py/softsys.py");
+ process.start("cp", QStringList() <<QCoreApplication::applicationDirPath()+"/magician.html" << QCoreApplication::applicationDirPath()+"/web2py/applications/"+sapp_name+"/views/default/");
+process.waitForFinished(-1);
+
+ process.start("python", QStringList() << QCoreApplication::applicationDirPath() + "/web2py/softsys.py");
 
  //    process.start("cp" , QStringList() << "/Users/user/QTProjects/SoftSys/web2py/welcome.w2p" << "/Users/user/QTProjects/SoftSys/web2py/applications/" + sapp_name +"/");
 

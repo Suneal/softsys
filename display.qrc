@@ -51,7 +51,6 @@
         <file>softsys/html/less/mixins.less</file>
         <file>softsys/html/less/variables.less</file>
         <file>softsys/html/mail/contact_me.php</file>
-        <file>ah.txt</file>
         <file>gaesql/app.yaml</file>
         <file>gaesql/gpl.txt</file>
         <file>gaesql/index.html</file>
@@ -61,7 +60,6 @@
         <file>gaesql/readme.md</file>
         <file>gaesql/style.css</file>
         <file>gaesql/sunildsk.py</file>
-        <file>ABOUT</file>
     </qresource>
     <qresource prefix="/new/prefix2">
         <file>gaesql/app.yaml</file>

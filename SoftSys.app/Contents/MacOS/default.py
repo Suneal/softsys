@@ -56,6 +56,14 @@ def call():
     supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
     """
     return service()
+def magician():
+    """
+    exposes services. for example:
+    http://..../[app]/default/call/jsonrpc
+    decorate with @services.jsonrpc the functions to expose
+    supports xml, json, xmlrpc, jsonrpc, amfrpc, rss, csv
+    """
+    return dict(message=T('Hello World'))
 
 
 @auth.requires_login() 
@@ -69,7 +77,13 @@ def api():
         '<tablename>': {'GET':{},'POST':{},'PUT':{},'DELETE':{}},
         }
     return Collection(db).process(request,response,rules)
-def all_records():
-    grid0=SQLFORM.grid(db.new,user_signature=False)
-    grid1=SQLFORM.grid(db.old,user_signature=False)
-    return locals()
+def magic_table1():
+   grid=SQLFORM.grid(db.table1,user_signature=False)
+   return locals()
+def magic_table2():
+   grid=SQLFORM.grid(db.table2,user_signature=False)
+   return locals()
+def magic_Future():
+   grid=SQLFORM.grid(db.Future,user_signature=False)
+   return locals()
+
